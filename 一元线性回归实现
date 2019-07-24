@@ -3,7 +3,7 @@ class LinearRegression:
     def fit(self,x,y):
         self.x=x
         self.y=y
-        self.w = (self.x.T * self.x).I * self.x.T * self.y
+        self.w = (self.x.T * self.x).I * self.x.T * self.y #最小二乘法的矩阵
         self.intercept_=self.w[0]
         self.coef_ =self.w[1]
     def predict(self,x1):
