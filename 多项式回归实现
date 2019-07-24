@@ -1,0 +1,21 @@
+import numpy as np
+from scipy.optimize import leastsq
+class PolynomialFeatures:
+    def __init__(self,n,x,y):
+        
+        self.n=n   #次数
+        self.y=y
+        self.x=x
+
+     #损失函数
+    def err_func(self,p,x,y):
+        ret =np.poly1d(p)(self.x) - self.y
+        return ret
+    def fit(self):
+        Pinit= np.random.randn(self.n)
+        parameters = leastsq(self.err_func, Pinit, args=(np.array(self.x), np.array(self.y)))
+        return parameters[0]
+    #预测
+    def predict(self,x_test):
+        p=np.poly1d(self.fit())
+        return p(x_test)
