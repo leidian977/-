@@ -1,0 +1,17 @@
+import numpy as np
+class LinearRegression:
+    
+    def fit(self,x,y):
+        self.x=x
+        self.y=y
+        intercept = np.ones((x.shape[0], 1))  # 初始化截距为 1
+        self.x = np.concatenate((intercept, self.x), axis=1)
+        #w = (x.T * x).I * x.T * y
+        inverse=np.linalg.inv(np.dot(self.x.T,self.x)) 
+        self.w = np.dot(np.dot(inverse,self.x.T),y) 
+        #self.w = (self.x.T * self.x).I * self.x.T * self.y #最小二乘法的矩阵
+        self.intercept_=self.w[0]
+        self.coef_ =self.w[1:]
+        return self.w
+    def predict(self,x1):
+        return self.intercept_+np.dot(x1,self.coef_)
