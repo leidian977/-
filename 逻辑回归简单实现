@@ -1,0 +1,22 @@
+import numpy as np
+class Logistic_Regression:
+    def __init__(self,max_iter,c):
+        self.max_iter=max_iter #最大迭代次数
+        self.c=c #学习率
+    def fit(self,x,y):
+        self.x=x
+        self.y=y
+        intercept = np.ones((self.x.shape[0], 1))  # 初始化截距为 1
+        self.x = np.concatenate((intercept, self.x), axis=1)
+        w = np.zeros(self.x.shape[1])  # 初始化参数为 0
+        for i in range(self.max_iter): #梯度下降
+            h=1 / (1 + np.exp(-np.dot(self.x,w)))
+            gradient=np.dot(self.x.T,(h-self.y))/self.y.shape[0]
+            w-=self.c*gradient
+            l=(-np.dot(self.y,np.log(h))-np.dot((1-self.y),np.log(1-h)))/self.y.shape[0]
+        self.w=w
+        return l,w
+        
+    def predict(self,x1):
+        result=self.w[0]+np.dot(x1,self.w[1:])
+        return result
