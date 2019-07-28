@@ -1,0 +1,22 @@
+import operator
+class KNeighborsClassifier:
+    def __init__(self,k):
+        self.k=k
+    def d_euc(self,x,y):
+        d = np.sqrt(np.sum(np.square(x - y)))
+        return d
+    def fit(self,x,y):
+        self.x=x
+        self.y=y
+    def predict(self,x1):
+        distances=[]
+        for each_x in self.x:
+            d=self.d_euc(x1,each_x)
+            distances.append(d)
+        sort_distances=sorted(distances)
+        class_count = {}
+        for i in range(self.k):
+            vote_y = self.y[distances.index(sort_distances[i])]
+            class_count[vote_y]=class_count.get(vote_y,0)+1
+        final = sorted(class_count.items(), key=operator.itemgetter(1), reverse=True)
+        return final[0][0]
