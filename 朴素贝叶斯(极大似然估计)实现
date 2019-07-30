@@ -1,0 +1,41 @@
+#参数估计：极大似然估计
+class naive_bayes:
+    #P(种类)
+    def fit(self,x,y):
+        self.x=x
+        self.y=y
+        
+    def P_lab(self,y1):
+        y1=list(y1)
+        y2=set(y1)
+        self.P_y = {}
+        for i in y2:
+            self.P_y[i] = y1.count(i)/len(y1)
+        return self.P_y
+    #P(特征/种类)
+    def P_fea_lab(self,features,x1):
+        P_fea_lab = {}
+        x1=np.array(x1)
+        for each_y in self.P_y.keys():
+            y_index = [i for i, j in enumerate(self.y) if j == each_y]  # y 中所有j数值的下标索引
+
+            for j in range(len(features)):
+                feature_index = [i for i, feature in enumerate(self.x[:, j]) if feature == features[j]]
+                # set(x_index)&set(y_index) 两个表相同的元素
+                fea_lab_count = len(set(feature_index) & set(y_index))
+                key = str(features[j]) + '|' + str(each_y)
+                P_fea_lab[key] = fea_lab_count / float(len(y_index))
+        return P_fea_lab
+    def predict(self,X_test):
+        P_lab=self.P_lab(self.y)
+        P_fea_lab=self.P_fea_lab(X_test,self.x)
+        P={}
+        P_show = {}  # 后验概率
+        for each_label in P_lab:
+            P[each_label] = P_lab[each_label]
+            for each_feature in X_test:
+                key = str(each_label)+'|'+str(X_test)
+                P_show[key] = P[each_label] * P_fea_lab[str(each_feature) + '|' + str(each_label)] # 分母相同，只比较分子
+        print(P_show)
+        features_label = max(P_show, key=P_show.get)  # 概率最大值对应的类别
+        return features_label[0]
