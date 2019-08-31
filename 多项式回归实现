@@ -35,4 +35,4 @@ model.fit()
 y=model.predict(X_test)
 
 mean_squared_error(y_test,y)
-9.310939227097645
+0.310939227097645
